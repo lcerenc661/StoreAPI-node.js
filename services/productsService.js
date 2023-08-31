@@ -1,6 +1,9 @@
 const { faker } = require('@faker-js/faker'); // Import faker to generate fake data
 const boom = require('@hapi/boom'); // Boom for error handling
 
+// const pool = require('../libs/postgresPool');
+const sequelize = require('../libs/sequelize');
+
 class ProductsService {
   constructor() {
     this.products = [];
@@ -15,7 +18,7 @@ class ProductsService {
         name: faker.commerce.productName(),
         price: parseInt(faker.commerce.price(), 10),
         image: faker.image.url(),
-        isBlocked : faker.datatype.boolean(),
+        isBlocked: faker.datatype.boolean(),
       });
     }
   }
@@ -29,12 +32,18 @@ class ProductsService {
     return newProduct;
   }
 
-  find() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(this.products);
-      }, 5000);
-    });
+  // find() {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       resolve(this.products);
+  //     }, 5000);
+  //   });
+  // }
+
+  async find(){
+    const query = 'SELECT * FROM taks';
+    const [data, metadata] = await sequelize.query(query);
+    return {data, metadata}
   }
 
   async findOne(id) {
@@ -42,8 +51,8 @@ class ProductsService {
     if (!product) {
       throw boom.notFound('Product not found');
     }
-    if (product.isBlocked){
-      throw boom.conflict('Product not enabled ')
+    if (product.isBlocked) {
+      throw boom.conflict('Product not enabled ');
     }
     return product;
   }

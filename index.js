@@ -9,6 +9,7 @@ const {
   logErrors,
   errorHandler,
   boomErrorHandler,
+  handleSQLError,
 } = require('./middlewares/errorHandler');
 // Use express as a constructor method to create the app
 const app = express();
@@ -41,5 +42,6 @@ routerApi(app);
 // The middlewares always are applied after the routing.
 // middlewares will execute in the order there were written
 app.use(logErrors);
+app.use(handleSQLError);
 app.use(boomErrorHandler);
 app.use(errorHandler);
