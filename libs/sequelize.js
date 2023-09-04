@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize')
 
-const { config } = require('../config/config'); // Import config without destructuring
+const { config } = require('../config/config');
 const setupModels = require('../db/models/index')
 
 const USER = encodeURIComponent(config.dbUser);
@@ -14,6 +14,6 @@ const sequelize = new Sequelize(URI, {
 
 setupModels(sequelize);
 
-sequelize.sync(); //Sequelize reads the models and synchronices with the tables
+// sequelize.sync(); //Sequelize reads the models and synchronices with the tables
 
 module.exports = sequelize;

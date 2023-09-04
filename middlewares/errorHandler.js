@@ -1,4 +1,4 @@
-const { ValidationError } = require('sequelize');
+const { ValidationError, Sequelize } = require('sequelize');
 const boom = require('@hapi/boom');
 
 function logErrors(err, req, res, next) {
@@ -30,10 +30,24 @@ function ormErrorHandler(err, req, res, next) {
     res.status(409).json({
       statusCode: 409,
       message: err.name,
-      erros: err.errors
+      erros: err.errors,
     });
   }
   next(err);
-
 }
-module.exports = { logErrors, errorHandler, boomErrorHandler, ormErrorHandler };
+
+// Create a middleware function
+function handleSQLError(err, req, res, next) {
+  if (err instanceof Sequelize.BaseError) {
+    res.status(409).json({ message: err.name, erros: err.errors });
+  }
+  next(err);
+}
+
+module.exports = {
+  logErrors,
+  errorHandler,
+  boomErrorHandler,
+  ormErrorHandler,
+  handleSQLError,
+};

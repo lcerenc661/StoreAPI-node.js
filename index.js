@@ -9,6 +9,7 @@ const {
   errorHandler,
   boomErrorHandler,
   ormErrorHandler,
+  handleSQLError
 } = require('./middlewares/errorHandler');
 // Use express as a constructor method to create the app
 const app = express();
@@ -43,4 +44,5 @@ routerApi(app);
 app.use(logErrors);
 app.use(ormErrorHandler);
 app.use(boomErrorHandler);
+app.use(handleSQLError);
 app.use(errorHandler);
