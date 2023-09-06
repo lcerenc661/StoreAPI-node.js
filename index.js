@@ -9,8 +9,9 @@ const {
   errorHandler,
   boomErrorHandler,
   ormErrorHandler,
-  handleSQLError
+  handleSQLError,
 } = require('./middlewares/errorHandler');
+const { checkApiKey } = require('./middlewares/authHandler');
 // Use express as a constructor method to create the app
 const app = express();
 // Configure ports
@@ -30,11 +31,12 @@ const options = {
   },
 };
 app.use(cors(options)); // Allows connection from any origin
+require('./utils/auth/index');
 
 console.log('Running App');
 
 //Endpoints
-app.get('/', (req, res) => {
+app.get('/firstRoute', checkApiKey, (req, res) => {
   res.send('Hello my server on express.js');
 });
 
